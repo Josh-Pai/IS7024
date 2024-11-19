@@ -27,7 +27,7 @@
         @foreach (var neighborhood in offensesByNeighborhood)
         {
             <li>
-                <strong>@neighborhood.Key</strong>
+                <strong>@neighborhood.Key (@neighborhood.Value.Count offenses)</strong>
                 <ul>
                     @foreach (var offense in neighborhood.Value)
                     {
@@ -35,6 +35,7 @@
                     }
                 </ul>
             </li>
+
         }
     </ul>
 }
