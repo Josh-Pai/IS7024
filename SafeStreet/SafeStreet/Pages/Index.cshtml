@@ -16,7 +16,7 @@
     <h1>@brand - Neighborhoods</h1>
     <form method="get">
         <label for="query">Search for Crime Data by Neeighborhood or Offense:</label>
-        <input type="text" id="query" name="query" />
+        <input type="text" id="query" name="query" value="@query" />
         <button type="submit">Search</button>
     </form>
 </div>
@@ -26,15 +26,16 @@
     <ul>
         @foreach (var neighborhood in offensesByNeighborhood)
         {
-            <li>
-                <strong>@neighborhood.Key</strong>
-                <ul>
+                   <li>
+            <strong>@neighborhood.Key (@neighborhood.Value.Count offenses)</strong>
+            <ul>
                     @foreach (var offense in neighborhood.Value)
                     {
                         <li>@offense</li>
                     }
-                </ul>
-            </li>
+            </ul>
+        </li>
+
         }
     </ul>
 }
