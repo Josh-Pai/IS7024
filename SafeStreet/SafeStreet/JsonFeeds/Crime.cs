@@ -23,6 +23,7 @@ namespace CincinnatiCrime
         [JsonProperty("incident_no")]
         public string IncidentNo { get; set; }
 
+
         [JsonProperty("date_reported")]
         public DateTimeOffset DateReported { get; set; }
 
@@ -109,6 +110,15 @@ namespace CincinnatiCrime
 
         [JsonProperty("suspect_gender", NullValueHandling = NullValueHandling.Ignore)]
         public string SuspectGender { get; set; }
+
+        public void Validate()
+        {
+            if (string.IsNullOrEmpty(Instanceid))
+                throw new ArgumentException("Instanceid is required.");
+            if (string.IsNullOrEmpty(IncidentNo))
+                throw new ArgumentException("IncidentNo is required.");
+        }
+
     }
 
     public partial class Crime
