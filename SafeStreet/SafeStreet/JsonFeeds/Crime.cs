@@ -68,8 +68,10 @@ namespace CincinnatiCrime
         [JsonProperty("date_of_clearance")]
         public DateTimeOffset DateOfClearance { get; set; }
 
-        [JsonProperty("hour_from")]
-        public String HourFrom { get; set; }
+        [JsonProperty("hour_from", NullValueHandling = NullValueHandling.Ignore)]
+        public string HourFrom { get; set; }
+
+        public int? ParsedHourFrom => int.TryParse(HourFrom, out int hour) ? hour : null;
 
         [JsonProperty("hour_to")]
         [JsonConverter(typeof(ParseStringConverter))]
