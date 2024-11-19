@@ -68,8 +68,11 @@ namespace CincinnatiCrime
         [JsonProperty("date_of_clearance")]
         public DateTimeOffset DateOfClearance { get; set; }
 
-        [JsonProperty("hour_from")]
-        public String HourFrom { get; set; }
+        [JsonProperty("hour_from", NullValueHandling = NullValueHandling.Ignore)]
+        public string HourFrom { get; set; }
+
+        public int? ParsedHourFrom => int.TryParse(HourFrom, out int hour) ? hour : null;
+
 
         [JsonProperty("hour_to")]
         [JsonConverter(typeof(ParseStringConverter))]
@@ -107,6 +110,15 @@ namespace CincinnatiCrime
 
         [JsonProperty("suspect_gender", NullValueHandling = NullValueHandling.Ignore)]
         public string SuspectGender { get; set; }
+
+        public void Validate()
+        {
+            if (string.IsNullOrEmpty(Instanceid))
+                throw new ArgumentException("Instanceid is required.");
+            if (string.IsNullOrEmpty(IncidentNo))
+                throw new ArgumentException("IncidentNo is required.");
+        }
+
     }
 
     public partial class Crime
