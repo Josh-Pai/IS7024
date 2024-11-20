@@ -6,93 +6,84 @@
 
 <h2>Crime Map View</h2>
 
-<div style="margin-top: 20px;">
-    <div>
-        <span style="font-size: 20px; font-weight: bold;">📍 Crime Heat Map</span>
-        <div style="display: inline-block; margin-left: 20px;">
-            <select>
+<div class="crime-map-container">
+    <div class="filters">
+        <span class="filters-title">📍 Crime Heat Map</span>
+        <div class="location-select">
+            <label for="state">State:</label>
+            <select id="state">
                 <option>California</option>
                 <option>New York</option>
-               
             </select>
-            <select>
+            <label for="city">City:</label>
+            <select id="city">
                 <option>Los Angeles</option>
                 <option>San Francisco</option>
-               
+                <option>Syracuse</option> <!-- New York City: Syracuse -->
+                <option>Buffalo</option>  <!-- New York City: Buffalo -->
             </select>
         </div>
     </div>
 
     <div class="crime-map-grid">
-        <div class="grid-item high-crime">
+        <div class="grid-item high-crime" data-crime-area="Downtown">
             <span>Downtown</span>
-            <br />
-            <span>Crime Rate: 85/100</span>
+            <span class="crime-rate">Crime Rate: 85/100</span>
         </div>
-        <div class="grid-item medium-crime">
+        <div class="grid-item medium-crime" data-crime-area="Hollywood">
             <span>Hollywood</span>
-            <br />
-            <span>Crime Rate: 65/100</span>
+            <span class="crime-rate">Crime Rate: 65/100</span>
         </div>
-        <div class="grid-item low-crime">
+        <div class="grid-item low-crime" data-crime-area="Venice">
             <span>Venice</span>
-            <br />
-            <span>Crime Rate: 45/100</span>
+            <span class="crime-rate">Crime Rate: 45/100</span>
         </div>
-        <div class="grid-item very-low-crime">
+        <div class="grid-item very-low-crime" data-crime-area="Santa Monica">
             <span>Santa Monica</span>
-            <br />
-            <span>Crime Rate: 35/100</span>
+            <span class="crime-rate">Crime Rate: 35/100</span>
         </div>
-        <div class="grid-item medium-crime">
+        <div class="grid-item medium-crime" data-crime-area="Koreatown">
             <span>Koreatown</span>
-            <br />
-            <span>Crime Rate: 55/100</span>
+            <span class="crime-rate">Crime Rate: 55/100</span>
         </div>
     </div>
 </div>
 
-<div id="tooltip" style="display: none; position: absolute; background: white; border: 1px solid #ccc; padding: 10px; border-radius: 5px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+<div id="tooltip" class="tooltip" role="tooltip">
     <span id="tooltip-text"></span>
 </div>
 
-
-<script>
-    const crimeData = {
-        "Venice": { rate: "45/100", totalIncidents: 220, violentCrimes: 50, propertyCrimes: 170 },
-    };
-
-    document.querySelectorAll('.grid-item').forEach(item => {
-        item.addEventListener('mouseenter', function(event) {
-            const area = this.innerText.split('\n')[0].trim();
-            const data = crimeData[area];
-            if (data) {
-                document.getElementById('tooltip-text').innerHTML = `
-                    <strong>${area}</strong><br>
-                    Crime Rate: ${data.rate}<br>
-                    Total Incidents: ${data.totalIncidents}<br>
-                    Violent Crimes: ${data.violentCrimes}<br>
-                    Property Crimes: ${data.propertyCrimes}
-                `;
-                const tooltip = document.getElementById('tooltip');
-                tooltip.style.display = 'block';
-                tooltip.style.top = `${event.pageY + 5}px`;
-                tooltip.style.left = `${event.pageX + 5}px`;
-            }
-        });
-        item.addEventListener('mouseleave', function() {
-            document.getElementById('tooltip').style.display = 'none';
-        });
-    });
-</script>
-
+<!-- Embedded CSS and JavaScript -->
 <style>
+    .crime-map-container {
+        margin-top: 20px;
+        font-family: Arial, sans-serif;
+    }
+
+    .filters {
+        margin-bottom: 20px;
+    }
+
+    .filters-title {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .location-select {
+        display: inline-block;
+        margin-left: 20px;
+    }
+
+        .location-select select {
+            margin-right: 10px;
+        }
+
     .crime-map-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
         gap: 10px;
-        margin-top: 20px;
     }
+
     .grid-item {
         padding: 20px;
         border-radius: 8px;
@@ -103,9 +94,71 @@
         justify-content: center;
         align-items: center;
         cursor: pointer;
+        transition: transform 0.3s ease;
     }
-    .high-crime { background-color: #d32f2f; }
-    .medium-crime { background-color: #e57373; }
-    .low-crime { background-color: #ef9a9a; }
-    .very-low-crime { background-color: #ffcdd2; }
+
+        .grid-item:hover {
+            transform: scale(1.05);
+        }
+
+    .high-crime {
+        background-color: #d32f2f;
+    }
+
+    .medium-crime {
+        background-color: #e57373;
+    }
+
+    .low-crime {
+        background-color: #ef9a9a;
+    }
+
+    .very-low-crime {
+        background-color: #ffcdd2;
+    }
+
+    .tooltip {
+        display: none;
+        position: absolute;
+        background: white;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
 </style>
+
+<script>
+    const crimeData = {
+        "Venice": { rate: "45/100", totalIncidents: 220, violentCrimes: 50, propertyCrimes: 170 },
+        "Hollywood": { rate: "65/100", totalIncidents: 150, violentCrimes: 40, propertyCrimes: 110 },
+        "Downtown": { rate: "85/100", totalIncidents: 300, violentCrimes: 100, propertyCrimes: 200 },
+        "Santa Monica": { rate: "35/100", totalIncidents: 100, violentCrimes: 20, propertyCrimes: 80 },
+        "Koreatown": { rate: "55/100", totalIncidents: 180, violentCrimes: 60, propertyCrimes: 120 }
+    };
+
+    document.querySelectorAll('.grid-item').forEach(item => {
+        item.addEventListener('mouseenter', function (event) {
+            const area = this.getAttribute('data-crime-area');
+            const data = crimeData[area];
+
+            if (data) {
+                document.getElementById('tooltip-text').innerHTML = `
+                        <strong>${area}</strong><br>
+                        Crime Rate: ${data.rate}<br>
+                        Total Incidents: ${data.totalIncidents}<br>
+                        Violent Crimes: ${data.violentCrimes}<br>
+                        Property Crimes: ${data.propertyCrimes}
+                    `;
+                const tooltip = document.getElementById('tooltip');
+                tooltip.style.display = 'block';
+                tooltip.style.top = `${event.pageY + 5}px`;
+                tooltip.style.left = `${event.pageX + 5}px`;
+            }
+        });
+
+        item.addEventListener('mouseleave', function () {
+            document.getElementById('tooltip').style.display = 'none';
+        });
+    });
+</script>
